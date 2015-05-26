@@ -1,26 +1,34 @@
 package com.example.tanan.cardsexample;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardViewNative;
 
+public class MainActivity extends Activity {
 
-public class MainActivity extends ActionBarActivity {
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        recyclerView = (RecyclerView) findViewById((R.id.my_recycler_view));
+
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
 
 
     }
@@ -45,37 +53,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static class TextOnlyCard extends Card {
-
-        TextView tvAvatarUrl;
-        TextView tvLogin;
-        String avatar_url;
-        String login;
-        Context context;
-
-        public TextOnlyCard(Context context, String avatar_url, String login) {
-            super(context, R.layout.image_text_card_layout);
-            this.avatar_url = avatar_url;
-            this.login = login;
-            this.context = context;
-            init();
-        }
-
-        private void init() {
-            CardHeader header = new CardHeader(context);
-            addCardHeader(header);
-            setSwipeable(true);
-        }
-
-        @Override
-        public void setupInnerViewElements(ViewGroup parent, View view) {
-            tvAvatarUrl = (TextView) parent.findViewById(R.id.card_main_inner_simple_subtitle);
-            tvLogin = (TextView) parent.findViewById(R.id.card_main_inner_simple_title);
-
-            tvAvatarUrl.setText(avatar_url);
-            tvLogin.setText(login);
-        }
     }
 }
