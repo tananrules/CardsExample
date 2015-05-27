@@ -1,19 +1,20 @@
 package com.example.tanan.cardsexample;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
 import retrofit.RestAdapter;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);
+
         recyclerView.setLayoutManager(layoutManager);
 
         new FetchUserTask().execute();
@@ -69,6 +71,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(List<User> users) {
             super.onPostExecute(users);
+            Toast.makeText(MainActivity.this, "" + users.size(), Toast.LENGTH_LONG).show();
             adapter = new UserAdapter(MainActivity.this, users);
             recyclerView.setAdapter(adapter);
         }

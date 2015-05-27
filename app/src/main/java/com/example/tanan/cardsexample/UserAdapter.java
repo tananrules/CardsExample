@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserListRowHolder> {
@@ -20,7 +22,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserListRowHolder> {
 
     @Override
     public UserListRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_item, null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_item, parent, false);
         UserListRowHolder rh = new UserListRowHolder(v);
         return rh;
     }
@@ -28,7 +30,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserListRowHolder> {
     @Override
     public void onBindViewHolder(UserListRowHolder holder, int position) {
         User user = userList.get(position);
-        holder.login.setText(user.login);
+
+        Picasso.with(mContext).load(user.avatar_url).into(holder.ivAvatarUrl);
+        holder.tvLogin.setText(user.login);
     }
 
     @Override
