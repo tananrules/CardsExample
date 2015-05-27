@@ -1,21 +1,23 @@
 package com.example.tanan.cardsexample;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.List;
+
+import retrofit.RestAdapter;
 
 
 public class MainActivity extends Activity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class MainActivity extends Activity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-
+        new FetchUserTask().execute();
 
     }
 
@@ -53,5 +55,22 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class FetchUserTask extends AsyncTask<Void, Void, List<User>> {
+
+        @Override
+        protected List<User> doInBackground(Void... params) {
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("https://api.github.com").build();
+            GithubUserService githubUserService = restAdapter.create(GithubUserService.class);
+            return githubUserService.getUsers();
+        }
+
+        @Override
+        protected void onPostExecute(List<User> users) {
+            super.onPostExecute(users);
+            adapter = new UserAdapter(MainActivity.this, users);
+            recyclerView.setAdapter(adapter);
+        }
     }
 }
